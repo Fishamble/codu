@@ -51,6 +51,7 @@ type UserDetails = {
   levelOfStudy: string;
   jobTitle: string;
   workplace: string;
+  yearsOfExperience: string;
 };
 
 export default function AdditionalSignUpDetails({
@@ -399,8 +400,14 @@ function SlideTwo({ details }: { details: UserDetails }) {
 function SlideThree({ details }: { details: UserDetails }) {
   const router = useRouter();
 
-  const { professionalOrStudent, workplace, jobTitle, course, levelOfStudy } =
-    details;
+  const {
+    professionalOrStudent,
+    workplace,
+    jobTitle,
+    course,
+    levelOfStudy,
+    yearsOfExperience,
+  } = details;
 
   const {
     register,
@@ -417,6 +424,7 @@ function SlideThree({ details }: { details: UserDetails }) {
       jobTitle,
       course,
       levelOfStudy,
+      yearsOfExperience,
     },
   });
 
@@ -427,7 +435,7 @@ function SlideThree({ details }: { details: UserDetails }) {
     const professionalOrStudent = getValues("professionalOrStudent");
 
     if (isError && professionalOrStudent === "Working professional") {
-      isError = await trigger(["workplace", "jobTitle"]);
+      isError = await trigger(["workplace", "jobTitle", "yearsOfExperience"]);
     }
 
     if (isError && professionalOrStudent === "Current student") {
@@ -448,6 +456,8 @@ function SlideThree({ details }: { details: UserDetails }) {
       }
     }
   };
+
+  const yearsOfExperienceOptions = ["0-1", "1-3", "3-5", "5-8", "12+"] as const;
 
   return (
     <form className="mx-auto max-w-sm" onSubmit={handleSubmit(onFormSubmit)}>
@@ -509,6 +519,28 @@ function SlideThree({ details }: { details: UserDetails }) {
                 {errors.jobTitle && (
                   <ErrorMessage className="text-red-500">
                     {errors.jobTitle.message}
+                  </ErrorMessage>
+                )}
+              </Field>
+
+              <Field className="mx-4 my-4">
+                <Label>Years of experience:</Label>
+                <Select
+                  id="years-of-experience"
+                  {...register("yearsOfExperience")}
+                >
+                  <option value="" disabled>
+                    Select range
+                  </option>
+                  {Object.values(yearsOfExperienceOptions).map((range) => (
+                    <option key={range} value={range}>
+                      {range} years
+                    </option>
+                  ))}
+                </Select>
+                {errors.yearsOfExperience && (
+                  <ErrorMessage className="text-red-500">
+                    {errors.yearsOfExperience.message}
                   </ErrorMessage>
                 )}
               </Field>
