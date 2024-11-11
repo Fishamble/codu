@@ -30,6 +30,7 @@ export const slideThreeSchema = z
     jobTitle: z.string().max(30, "Max length is 30 characters."),
     levelOfStudy: z.string(),
     course: z.string().max(30, "Max name length is 30 characters."),
+    yearsOfExperience: z.string(),
   })
   .superRefine((val, ctx) => {
     if (
@@ -65,6 +66,16 @@ export const slideThreeSchema = z
     ) {
       ctx.addIssue({
         path: ["jobTitle"],
+        code: "custom",
+        message: "required",
+      });
+    }
+    if (
+      val.professionalOrStudent === "Working professional" &&
+      val.yearsOfExperience === ""
+    ) {
+      ctx.addIssue({
+        path: ["yearsOfExperience"],
         code: "custom",
         message: "required",
       });

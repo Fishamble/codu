@@ -80,8 +80,14 @@ export async function slideThreeSubmitAction(dataInput: TypeSlideThreeSchema) {
   }
 
   try {
-    const { professionalOrStudent, course, jobTitle, levelOfStudy, workplace } =
-      slideThreeSchema.parse(dataInput);
+    const {
+      professionalOrStudent,
+      course,
+      jobTitle,
+      levelOfStudy,
+      workplace,
+      yearsOfExperience,
+    } = slideThreeSchema.parse(dataInput);
 
     await db
       .update(user)
@@ -91,6 +97,7 @@ export async function slideThreeSubmitAction(dataInput: TypeSlideThreeSchema) {
         jobTitle,
         levelOfStudy,
         workplace,
+        yearsOfExperience,
       })
       .where(eq(user.id, session.user.id));
 
