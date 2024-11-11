@@ -89,6 +89,8 @@ export async function slideThreeSubmitAction(dataInput: TypeSlideThreeSchema) {
       yearsOfExperience,
     } = slideThreeSchema.parse(dataInput);
 
+    const onboardingComplete = new Date().toISOString();
+
     await db
       .update(user)
       .set({
@@ -98,6 +100,7 @@ export async function slideThreeSubmitAction(dataInput: TypeSlideThreeSchema) {
         levelOfStudy,
         workplace,
         yearsOfExperience,
+        onboardingComplete,
       })
       .where(eq(user.id, session.user.id));
 
