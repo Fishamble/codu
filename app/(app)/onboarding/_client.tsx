@@ -21,7 +21,7 @@ import {
   locationOptions,
   levelOfStudyOptions,
   monthsOptions,
-} from "@/app/(app)/alpha/additional-details/selectOptions";
+} from "@/app/(app)/onboarding/selectOptions";
 import {
   slideOneSubmitAction,
   slideThreeSubmitAction,
