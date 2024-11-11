@@ -217,6 +217,11 @@ export const user = pgTable(
     levelOfStudy: text("levelOfStudy"),
     course: text("course"),
     role: role("role").default("USER").notNull(),
+    yearsOfExperience: text("yearsOfExperience"),
+    onboardingComplete: timestamp("onboardingComplete", {
+      mode: "string",
+      withTimezone: true,
+    }),
   },
   (table) => {
     return {
