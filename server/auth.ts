@@ -62,8 +62,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, user }) {
       if (session.user) {
+        const userStatus = await db.query.user.findFirst({
+          where: (users, { eq }) => eq(users.id, user.id),
+          columns: { onboardingComplete: true },
+        });
+
         session.user.id = user.id;
         session.user.role = user.role;
+        // onboardingComplete is an iso date string - if it exists then it is complete
+        session.user.isOnboardingComplete = !!userStatus?.onboardingComplete;
       }
       return session;
     },
