@@ -121,6 +121,7 @@ export const setup = async () => {
       location: "Ireland",
       bio: "Hi I am an robot",
       websiteUrl: "codu.co",
+      onboardingComplete: new Date().toISOString(),
     };
     const [createdUser] = await db.insert(user).values(userData).returning();
     return createdUser;
