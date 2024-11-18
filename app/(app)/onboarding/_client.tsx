@@ -39,6 +39,7 @@ import { Select } from "@/components/ui-components/select";
 import { Button } from "@/components/ui-components/button";
 import { Heading, Subheading } from "@/components/ui-components/heading";
 import { Divider } from "@/components/ui-components/divider";
+import { experienceRangeEnum } from "@/server/db/schema";
 
 type UserDetails = {
   username: string;
@@ -51,7 +52,7 @@ type UserDetails = {
   levelOfStudy: string;
   jobTitle: string;
   workplace: string;
-  yearsOfExperience: string;
+  yearsOfExperience: "0-1" | "1-3" | "3-5" | "5-8" | "12+" | undefined;
 };
 
 export default function AdditionalSignUpDetails({
@@ -358,7 +359,7 @@ function SlideTwo({ details }: { details: UserDetails }) {
                 id="day"
                 aria-label="day"
                 value={day ? day : ""}
-                disabled={!month || undefined}
+                disabled={month === undefined || year === undefined}
                 required
                 onChange={(e) => setDay(Number(e.target.value))}
               >
@@ -424,7 +425,13 @@ function SlideThree({ details }: { details: UserDetails }) {
       jobTitle,
       course,
       levelOfStudy,
-      yearsOfExperience,
+      yearsOfExperience: yearsOfExperience as
+        | "0-1"
+        | "1-3"
+        | "3-5"
+        | "5-8"
+        | "12+"
+        | undefined,
     },
   });
 
@@ -456,8 +463,6 @@ function SlideThree({ details }: { details: UserDetails }) {
       }
     }
   };
-
-  const yearsOfExperienceOptions = ["0-1", "1-3", "3-5", "5-8", "12+"] as const;
 
   return (
     <form className="mx-auto max-w-sm" onSubmit={handleSubmit(onFormSubmit)}>
@@ -528,11 +533,12 @@ function SlideThree({ details }: { details: UserDetails }) {
                 <Select
                   id="years-of-experience"
                   {...register("yearsOfExperience")}
+                  defaultValue=""
                 >
                   <option value="" disabled>
-                    Select range
+                    Select years of experience
                   </option>
-                  {Object.values(yearsOfExperienceOptions).map((range) => (
+                  {experienceRangeEnum.enumValues.map((range) => (
                     <option key={range} value={range}>
                       {range} years
                     </option>

@@ -38,7 +38,7 @@ export default async function Page() {
     levelOfStudy: details?.levelOfStudy || "",
     jobTitle: details?.jobTitle || "",
     workplace: details?.workplace || "",
-    yearsOfExperience: details?.yearsOfExperience || "",
+    yearsOfExperience: details?.yearsOfExperience || undefined,
   };
 
   return <Content details={detailsWithNullsRemoved} />;

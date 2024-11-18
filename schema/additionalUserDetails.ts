@@ -1,4 +1,7 @@
+import { experienceRangeEnum } from "@/server/db/schema";
 import z from "zod";
+
+export const experienceRangeValues = experienceRangeEnum.enumValues;
 
 export const slideOneSchema = z.object({
   name: z
@@ -30,55 +33,50 @@ export const slideThreeSchema = z
     jobTitle: z.string().max(30, "Max length is 30 characters."),
     levelOfStudy: z.string(),
     course: z.string().max(30, "Max name length is 30 characters."),
-    yearsOfExperience: z.string(),
+    yearsOfExperience: z
+      .enum(experienceRangeValues, {
+        errorMap: () => ({ message: "Please select a valid experience range" }),
+      })
+      .optional(),
   })
   .superRefine((val, ctx) => {
-    if (
-      val.professionalOrStudent === "Current student" &&
-      val.levelOfStudy === ""
-    ) {
-      ctx.addIssue({
-        path: ["levelOfStudy"],
-        code: "custom",
-        message: "required",
-      });
-    }
-    if (val.professionalOrStudent === "Current student" && val.course === "") {
-      ctx.addIssue({
-        path: ["course"],
-        code: "custom",
-        message: "required",
-      });
-    }
-    if (
-      val.professionalOrStudent === "Working professional" &&
-      val.workplace === ""
-    ) {
-      ctx.addIssue({
-        path: ["workplace"],
-        code: "custom",
-        message: "required",
-      });
-    }
-    if (
-      val.professionalOrStudent === "Working professional" &&
-      val.jobTitle === ""
-    ) {
-      ctx.addIssue({
-        path: ["jobTitle"],
-        code: "custom",
-        message: "required",
-      });
-    }
-    if (
-      val.professionalOrStudent === "Working professional" &&
-      val.yearsOfExperience === ""
-    ) {
-      ctx.addIssue({
-        path: ["yearsOfExperience"],
-        code: "custom",
-        message: "required",
-      });
+    if (val.professionalOrStudent === "Current student") {
+      if (val.levelOfStudy === "") {
+        ctx.addIssue({
+          path: ["levelOfStudy"],
+          code: "custom",
+          message: "required",
+        });
+      }
+      if (val.course === "") {
+        ctx.addIssue({
+          path: ["course"],
+          code: "custom",
+          message: "required",
+        });
+      }
+    } else if (val.professionalOrStudent === "Working professional") {
+      if (val.workplace === "") {
+        ctx.addIssue({
+          path: ["workplace"],
+          code: "custom",
+          message: "required",
+        });
+      }
+      if (val.jobTitle === "") {
+        ctx.addIssue({
+          path: ["jobTitle"],
+          code: "custom",
+          message: "required",
+        });
+      }
+      if (val.yearsOfExperience === undefined) {
+        ctx.addIssue({
+          path: ["yearsOfExperience"],
+          code: "custom",
+          message: "required",
+        });
+      }
     }
   });
 
