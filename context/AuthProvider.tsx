@@ -19,8 +19,6 @@ function OnboardingCheck({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  console.log("-------------");
-
   useEffect(() => {
     if (status === "authenticated" && !session?.user?.isOnboardingComplete) {
       router.push("/onboarding");
