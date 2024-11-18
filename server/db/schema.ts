@@ -170,6 +170,14 @@ export const postRelations = relations(post, ({ one, many }) => ({
   tags: many(post_tag),
 }));
 
+export const experienceRangeEnum = pgEnum("experience_range", [
+  "0-1",
+  "1-3",
+  "3-5",
+  "5-8",
+  "12+",
+]);
+
 export const user = pgTable(
   "user",
   {
@@ -217,7 +225,7 @@ export const user = pgTable(
     levelOfStudy: text("levelOfStudy"),
     course: text("course"),
     role: role("role").default("USER").notNull(),
-    yearsOfExperience: text("yearsOfExperience"),
+    yearsOfExperience: experienceRangeEnum("yearsOfExperience"),
     onboardingComplete: timestamp("onboardingComplete", {
       mode: "string",
       withTimezone: true,
